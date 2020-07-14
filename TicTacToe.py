@@ -8,10 +8,6 @@
 # game over
 
 
-def is_draw(board, round):
-    return round == 9 and not find_winner(board)
-
-
 def main():
     #Board is a list of rows
     #Rows is a list of cells
@@ -28,18 +24,15 @@ def main():
     symbols = ["X", "O"]
     player = players[active_player_index]
 
-    round = 0
     # UNTIL SOMEONE WINS
-    while not (find_winner(board) or is_draw(board, round)):
+    while not find_winner(board):
         # SHOW THE BOARD
         player = players[active_player_index]
         symbol = symbols[active_player_index]
 
-        announce_turn(player, symbol)
+        announce_turn(player)
         show_board(board)
-        if choose_location(board, symbol):
-            round += 1
-        else:
+        if not choose_location(board, symbol):
             print("That isn't an option, try again")
             continue
 
@@ -49,25 +42,18 @@ def main():
         active_player_index = (active_player_index+1) % len(players)
 
     print()
-    if is_draw(board, round):
-        print("It's a draw !")
-    else:
-        print(f"Game over! {player} has won with the player")
-    print()
-    show_board(board)
+    print(f"Game over! {player} has won with the player")
 
 
 
 def choose_location(board, symbol):
     print()
-    rowcol = input("Choose which position (row, column): ")
-    if len(rowcol) != 2:
-        return False
+    row = int(input("Choose which row: "))
+    column = int(input("Choose which column: "))
 
-    row = int(rowcol[0])-1
-    column = int(rowcol[1])-1
 
-    print(row, column)
+    row -= 1
+    column -= 1
     if row < 0 or row >= len(board):
         return False
     if column < 0 or column >= len(board):
@@ -81,17 +67,16 @@ def choose_location(board, symbol):
     return True
 
 def show_board(board):
-    print('   '+''.join([f'|  {i+1}  ' for i in range(3)])+'|')
-    for i, row in enumerate(board):
-        print(f"{i+1}  |  ", end='')
+    for row in board:
+        print("  |  ", end='')
         for cell in row:
             symbol = cell if cell is not None else "_"
             print(symbol, end="  |  ")
         print()
 
-def announce_turn(player, symbol):
+def announce_turn(player):
     print()
-    print(f"It's {player}[{symbol}]'s turn. Here is the board:")
+    print(f"It's {player}'s turn. Here is the board:")
     print()
 
 
@@ -125,26 +110,17 @@ def get_winning_sequences(board):
     # WIN BY DIAGONALS
     diagonals = [
         [board[0][0],board[1][1],board[2][2]],
-        [board[0][2],board[1][1],board[2][0]]
+        [board[0][2],board[1][1],board[1][0]]
     ]
     sequences.extend(diagonals)
 
+    #daddy adds some new stuff
+    
     return sequences
 
-# bug scenario
-#  |  1  |  2  |  3  |
-# 1  |  O  |  _  |  _  |
-# 2  |  X  |  X  |  O  |
-# 3  |  _  |  _  |  _  |
-#
-# Choose which position (row, column): 13
 
-# draw bug
-# Game over! PLAYER1 has won with the player
-#    |  1  |  2  |  3  |
-# 1  |  X  |  O  |  O  |
-# 2  |  O  |  X  |  X  |
-# 3  |  X  |  X  |  O  |
+
+
 
 if __name__ == '__main__':
     main()
