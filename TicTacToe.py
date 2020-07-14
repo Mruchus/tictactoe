@@ -49,7 +49,11 @@ def main():
         active_player_index = (active_player_index+1) % len(players)
 
     print()
-    print(f"Game over! {player} has won with the player")
+    if is_draw(board, round):
+        print("It's a draw !")
+    else:
+        print(f"Game over! {player} has won with the player")
+    print()
     show_board(board)
 
 
@@ -135,6 +139,12 @@ def get_winning_sequences(board):
 #
 # Choose which position (row, column): 13
 
+# draw bug
+# Game over! PLAYER1 has won with the player
+#    |  1  |  2  |  3  |
+# 1  |  X  |  O  |  O  |
+# 2  |  O  |  X  |  X  |
+# 3  |  X  |  X  |  O  |
 
 if __name__ == '__main__':
     main()
