@@ -114,6 +114,8 @@ def get_winning_sequences(board):
     ]
     sequences.extend(diagonals)
 
+    #daddy adds some new stuff
+    
     return sequences
 
 
