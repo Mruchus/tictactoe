@@ -125,6 +125,16 @@ myfont = pygame.font.SysFont("monospace", 60)
 
 # main program
 
+def draw_top_piece(event, player_turn):
+    pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARESIZE))
+    posx = event.pos[0]
+    if player_turn == 0:
+        pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE / 2)), RADIUS)
+    else:
+        pygame.draw.circle(screen, YELLOW, (posx, int(SQUARESIZE / 2)), RADIUS)
+    pygame.display.update()
+
+
 while True:
 
     while not game_over:
@@ -136,24 +146,11 @@ while True:
                 sys.exit()
 
             if event.type == pygame.MOUSEMOTION:
-                pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
-                posx = event.pos[0]
-
-                if player_turn == 0:
-                    pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE/2)), RADIUS)
-
-                else:
-                    pygame.draw.circle(screen, YELLOW, (posx, int(SQUARESIZE/2)), RADIUS)
-
-            pygame.display.update()
-
-
+                draw_top_piece(event, player_turn)
 
             if event.type == pygame.MOUSEBUTTONDOWN and \
                     (pygame.mouse.get_pressed() ==  (1, 0, 0) or
                      pygame.mouse.get_pressed() ==  (0, 0, 1)):
-                # print("mouse press {}", pygame.mouse.get_pressed())
-                # pygame.draw.rect(screen, YELLOW, (0,0, width, SQUARESIZE))
 
                 if player_turn == 0:
                     posx =event.pos[0]
@@ -161,16 +158,14 @@ while True:
 
                     if is_valid_location(board, col):
                         correct_move = True
-                        pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARESIZE))
 
-                        if player_turn == 0:
-                            row = get_next_open_row(board, col)
-                            drop_piece(board, row, col, 1)
+                        row = get_next_open_row(board, col)
+                        drop_piece(board, row, col, 1)
 
-                            if winning_move(board, 1):
-                                label = myfont.render("Player 1 WINS!", 1, RED)
-                                screen.blit(label, (40,10))
-                                game_over = True
+                        if winning_move(board, 1):
+                            label = myfont.render("Player 1 WINS!", 1, RED)
+                            screen.blit(label, (40,10))
+                            game_over = True
 
                 #ask for player 2 input
                 else:
@@ -189,13 +184,14 @@ while True:
 
 
                 if correct_move:
+                    player_turn += 1
+                    player_turn = player_turn % 2
+
                     print()
                     print_board(board)
                     draw_board(board)
+                    draw_top_piece(event, player_turn)
                     print()
-
-                    player_turn += 1
-                    player_turn = player_turn % 2
 
     #start again
     game_over = False
