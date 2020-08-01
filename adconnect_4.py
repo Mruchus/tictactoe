@@ -149,7 +149,10 @@ while True:
 
 
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and \
+                    (pygame.mouse.get_pressed() ==  (1, 0, 0) or
+                     pygame.mouse.get_pressed() ==  (0, 0, 1)):
+                print("mouse press {}", pygame.mouse.get_pressed())
                 pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
 
                 if turn == 0:
