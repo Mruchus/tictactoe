@@ -134,6 +134,9 @@ def draw_top_piece(event, player_turn):
         pygame.draw.circle(screen, YELLOW, (posx, int(SQUARESIZE / 2)), RADIUS)
     pygame.display.update()
 
+def draw_label(text, color):
+    label = myfont.render(text, 1, color)
+    screen.blit(label, (40,10))
 
 while True:
 
@@ -163,8 +166,7 @@ while True:
                         drop_piece(board, row, col, 1)
 
                         if winning_move(board, 1):
-                            label = myfont.render("Player 1 WINS!", 1, RED)
-                            screen.blit(label, (40,10))
+                            draw_label("Player 1 WINS!", RED)
                             game_over = True
 
                 #ask for player 2 input
@@ -178,8 +180,7 @@ while True:
                         drop_piece(board, row, col, 2)
 
                         if winning_move(board, 2):
-                            label = myfont.render("Player 2 WINS!", 1, YELLOW)
-                            screen.blit(label, (40,10))
+                            draw_label("Player 2 WINS!", YELLOW)
                             game_over =  True
 
 
@@ -192,6 +193,9 @@ while True:
                     draw_board(board)
                     draw_top_piece(event, player_turn)
                     print()
+                else:
+                    draw_label("Wrong move. Try again!", BLUE)
+                    pygame.display.update()
 
     #start again
     game_over = False
