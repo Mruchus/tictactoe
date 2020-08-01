@@ -102,8 +102,7 @@ print()
 print_board(board)
 print()
 game_over = False
-turn = 0
-
+player_turn = 0
 
 pygame.init()
 
@@ -131,6 +130,7 @@ while True:
     while not game_over:
 
         for event in pygame.event.get():
+            correct_move = False
 
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -139,7 +139,7 @@ while True:
                 pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
                 posx = event.pos[0]
 
-                if turn == 0:
+                if player_turn == 0:
                     pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE/2)), RADIUS)
 
                 else:
@@ -152,17 +152,18 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN and \
                     (pygame.mouse.get_pressed() ==  (1, 0, 0) or
                      pygame.mouse.get_pressed() ==  (0, 0, 1)):
-                print("mouse press {}", pygame.mouse.get_pressed())
-                pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
+                # print("mouse press {}", pygame.mouse.get_pressed())
+                # pygame.draw.rect(screen, YELLOW, (0,0, width, SQUARESIZE))
 
-                if turn == 0:
+                if player_turn == 0:
                     posx =event.pos[0]
                     col = int(math.floor(posx / SQUARESIZE))
 
                     if is_valid_location(board, col):
+                        correct_move = True
                         pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARESIZE))
 
-                        if turn == 0:
+                        if player_turn == 0:
                             row = get_next_open_row(board, col)
                             drop_piece(board, row, col, 1)
 
@@ -177,6 +178,7 @@ while True:
                     col = int(math.floor(posx / SQUARESIZE))
 
                     if is_valid_location(board, col):
+                        correct_move = True
                         row = get_next_open_row(board, col)
                         drop_piece(board, row, col, 2)
 
@@ -186,14 +188,14 @@ while True:
                             game_over =  True
 
 
+                if correct_move:
+                    print()
+                    print_board(board)
+                    draw_board(board)
+                    print()
 
-                print()
-                print_board(board)
-                draw_board(board)
-                print()
-
-                turn += 1
-                turn = turn % 2
+                    player_turn += 1
+                    player_turn = player_turn % 2
 
     #start again
     game_over = False
